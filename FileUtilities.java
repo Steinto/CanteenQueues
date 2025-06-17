@@ -1,9 +1,11 @@
 /**
- * to controll reading and writin files
+ * to controll reading and writing files
  *
  * Toby Steiner
  * 16/6/2025
  */
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Scanner;
 import java.io.File;
 import java.util.ArrayList;
@@ -14,32 +16,28 @@ import java.util.Arrays;
 public class FileUtilities
 {
     // instance variables - replace the example below with your own
-    private int x;
+    private String file;
 
     /**
      * Constructor for objects of class File
      */
-    public FileUtilities()
+    public FileUtilities(String file)
     {
-        // initialise instance variables
-        x = 0;
+        this.file = file;
     }
 
-    public void read(){
-        try{
-            File myFile = new File("bankData - bankData.csv");
+    public void readLine(int lineNumber){
+        try(BufferedReader reader = new BufferedReader(new FileReader(this.file))){
+            File myFile = new File(this.file);
             Scanner myReader = new Scanner(myFile);
-            while (myReader.hasNextLine()) {
-                List<List<String>> data = new ArrayList<>();
-                ArrayList<String> arrL = new ArrayList<String>();
-                List<String> lineData = Arrays.asList(myReader.nextLine().split(","));
-                data.add(lineData);
-                for (List<String> list : data) {
-                    for (String str : list) {
-                        arrL.add(str);
-                    }
+            int currentLine = 1;
+            String line;
+            while((line = reader.readLine()) != null){
+                if (currentLine == lineNumber++) {
+                    lineNumber--;
+                    System.out.println("Line " + lineNumber + ": " + line);
+                    break;
                 }
-                System.out.println(arrL.get(0), arrL.get(1), arrL.get(2), arrL.get(3));
             }
         }catch(Exception e){
             System.out.print(e);

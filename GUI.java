@@ -45,7 +45,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         pause = new JButton("pause");
         pause.addActionListener(this);
         
-        close = new JButton("stop");
+        close = new JButton("file read");
         close.addActionListener(this);
         
         
@@ -89,8 +89,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         String cmd = e.getActionCommand();
         System.out.println(cmd);
         switch(cmd){
-            case "":
-                
+            case "file read":
+                // private FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
+                // arrivals.readLine(1);
+                break;
             
             
         }
