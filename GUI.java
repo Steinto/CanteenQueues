@@ -11,7 +11,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener
 {
     JPanel titlePanel;
     JPanel sidePanel;
-    JPanel CenterPanel;
+    JPanel centerPanel;
     
     JLabel labelTitle;
     JLabel explanation;
@@ -21,9 +21,15 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     JButton pause;
     JButton close;
     
-    private PQueue Queue; 
+    private PQueue queue; 
+    private int turn = 2;
     
-    public GUI(PQueue Queue){
+    String studentImage = "Student.jpg";
+    JLabel images;
+    
+    public GUI(PQueue queueInput){
+        this.queue = queueInput;
+        
         setTitle("Canteen Queues Simulation");
         this.getContentPane().setPreferredSize(new Dimension(600, 600));
         
@@ -34,27 +40,27 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         labelTitle = new JLabel("WELCOME TO THE SIMULATION");
         labelTitle.setFont(new Font("Arial", Font.BOLD, 20));
         labelTitle.setAlignmentX(CENTER_ALIGNMENT);
-        
         explanation = new JLabel("Top queue is students and bottom queue is staff");
         explanation.setAlignmentX(CENTER_ALIGNMENT);
-        
         time = new JLabel("Minute: 1");
         
         
         nextStep = new JButton("next Step");
         nextStep.addActionListener(this);
-        
         pause = new JButton("pause");
         pause.addActionListener(this);
-        
         close = new JButton("file read");
         close.addActionListener(this);
         
+        ImageIcon studentImage1 = new ImageIcon(studentImage);
+        images = new JLabel(studentImage1);
         
-        CenterPanel = new JPanel();
-        CenterPanel.setLayout(new BoxLayout(CenterPanel, BoxLayout.PAGE_AXIS));
-        CenterPanel.setBackground(Color.decode("#B9DA8B"));
-        this.add(CenterPanel, BorderLayout.CENTER);
+        centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
+        centerPanel.setBackground(Color.decode("#B9DA8B"));
+        this.add(centerPanel, BorderLayout.CENTER);
+        
+
         
         titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.PAGE_AXIS));
@@ -95,15 +101,31 @@ public class GUI extends JFrame implements ActionListener, MouseListener
                 FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
                 arrivals.readLine(2);
                 break;
+            case "next Step":
+                
+                displayQueue();
+                break;
             
             
         }
         // createDialogExample();
     }
     
+    public void nextStepLogic(){
+        FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
+        arrivals.readLine(2);
+    }
+    
     public void displayQueue(){
+        ImageIcon studentImage1 = new ImageIcon(studentImage);
+        System.out.println(this.queue.getLowPLength());
+        centerPanel.removeAll();
+        for(int i = 0; i < (this.queue.getLowPLength());i++){
+            JLabel image = new JLabel(studentImage1);
+            centerPanel.add(image);
             
+        }
         
-        
+        this.pack();
     }
 }

@@ -44,4 +44,8 @@ public class PQueue
     public int getLowPLength(){
         return lowP.getLength();
     }
+    
+    public int getHighPLength(){
+        return highP.getLength();
+    }
 }
