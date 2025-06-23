@@ -6,10 +6,13 @@
  */
 public class main
 {
-    private GUI GUI = new GUI();
+    private PQueue canteenQueue = new PQueue();
+    private GUI GUI = new GUI(canteenQueue);
     // private FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
     
     public main(){
+        
+        
         
         
         

@@ -21,7 +21,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     JButton pause;
     JButton close;
     
-    public GUI(){
+    private PQueue Queue; 
+    
+    public GUI(PQueue Queue){
         setTitle("Canteen Queues Simulation");
         this.getContentPane().setPreferredSize(new Dimension(600, 600));
         
@@ -90,12 +92,18 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         System.out.println(cmd);
         switch(cmd){
             case "file read":
-                // private FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
-                // arrivals.readLine(1);
+                FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
+                arrivals.readLine(2);
                 break;
             
             
         }
         // createDialogExample();
+    }
+    
+    public void displayQueue(){
+            
+        
+        
     }
 }

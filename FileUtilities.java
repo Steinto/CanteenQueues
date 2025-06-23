@@ -17,6 +17,7 @@ public class FileUtilities
 {
     // instance variables - replace the example below with your own
     private String file;
+    
 
     /**
      * Constructor for objects of class File
@@ -33,11 +34,12 @@ public class FileUtilities
             int currentLine = 1;
             String line;
             while((line = reader.readLine()) != null){
-                if (currentLine == lineNumber++) {
+                if (currentLine == lineNumber) {
                     lineNumber--;
                     System.out.println("Line " + lineNumber + ": " + line);
                     break;
                 }
+                currentLine++;
             }
         }catch(Exception e){
             System.out.print(e);

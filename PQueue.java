@@ -4,6 +4,7 @@
  * Toby Steiner
  * 16/6/2025
  */
+import java.util.Arrays;
 public class PQueue
 {
     private Queue lowP;
@@ -17,9 +18,9 @@ public class PQueue
 
     public void enqueue(int num, boolean high){
         if(high){
-            highP.queue(num);
+            this.highP.queue(num);
         }else{
-            lowP.queue(num);
+            this.lowP.queue(num);
         }
     }
     
@@ -38,5 +39,9 @@ public class PQueue
         }else{
             return false;
         }
+    }
+    
+    public int getLowPLength(){
+        return lowP.getLength();
     }
 }
