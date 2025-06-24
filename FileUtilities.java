@@ -27,22 +27,23 @@ public class FileUtilities
         this.file = file;
     }
 
-    public void readLine(int lineNumber){
+    public String readLine(int lineNumber){
+        String line = "";
         try(BufferedReader reader = new BufferedReader(new FileReader(this.file))){
             File myFile = new File(this.file);
             Scanner myReader = new Scanner(myFile);
             int currentLine = 1;
-            String line;
             while((line = reader.readLine()) != null){
                 if (currentLine == lineNumber) {
                     lineNumber--;
-                    System.out.println("Line " + lineNumber + ": " + line);
-                    break;
+                    // System.out.println("Line " + lineNumber + ": " + line);
+                    return(line);
                 }
                 currentLine++;
             }
         }catch(Exception e){
             System.out.print(e);
         }
+        return(line);
     }
 }

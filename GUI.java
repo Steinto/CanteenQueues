@@ -27,6 +27,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     String studentImage = "Student.jpg";
     JLabel images;
     
+    String teacherImage = "Teacher.png";
+    
     public GUI(PQueue queueInput){
         this.queue = queueInput;
         
@@ -98,11 +100,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         System.out.println(cmd);
         switch(cmd){
             case "file read":
-                FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
-                arrivals.readLine(2);
+                nextStepLogic();
                 break;
             case "next Step":
-                
+                // nextStepLogic();
                 displayQueue();
                 break;
             
@@ -113,18 +114,49 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     
     public void nextStepLogic(){
         FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
-        arrivals.readLine(2);
+        System.out.println(arrivals.readLine(3));
+        String[] data = arrivals.readLine(3).split(",");
+        
+        int students = Integer.parseInt(data[1]);
+        int time = Integer.parseInt(data[0]);
+        int staff = Integer.parseInt(data[2]);
+        int served = Integer.parseInt(data[3]);
+        
+        for (int i = 0; i < students;i++){
+            this.queue.enqueue(time, false);
+        }
+        
+        for (int i = 0; i < staff;i++){
+            this.queue.enqueue(time, true);
+        }
+        
+        for (int i = 0; i < served;i++){
+            this.queue.dequeue();
+        }
+        
+                
     }
     
     public void displayQueue(){
         ImageIcon studentImage1 = new ImageIcon(studentImage);
-        System.out.println(this.queue.getLowPLength());
+        ImageIcon teacherImage1 = new ImageIcon(teacherImage);
         centerPanel.removeAll();
+        
+        // System.out.println(this.queue.getHighPLength());
+        for(int i = 0; i < (this.queue.getHighPLength());i++){
+            JLabel image = new JLabel(teacherImage1);
+            centerPanel.add(image);
+            
+        }
+        
+        // System.out.println(this.queue.getLowPLength());
         for(int i = 0; i < (this.queue.getLowPLength());i++){
             JLabel image = new JLabel(studentImage1);
             centerPanel.add(image);
             
         }
+        
+        
         
         this.pack();
     }

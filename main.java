@@ -11,8 +11,9 @@ public class main
     // private FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
     
     public main(){
-        canteenQueue.enqueue(3, false);
-        canteenQueue.enqueue(3, false);
+        // canteenQueue.enqueue(3, false);
+        // canteenQueue.enqueue(3, false);
+        // canteenQueue.enqueue(3, true);
         
     }
 }
