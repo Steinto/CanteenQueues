@@ -17,7 +17,6 @@ public class FileUtilities
 {
     // instance variables - replace the example below with your own
     private String file;
-    
 
     /**
      * Constructor for objects of class File
@@ -25,6 +24,23 @@ public class FileUtilities
     public FileUtilities(String file)
     {
         this.file = file;
+    }
+
+    public boolean hasNextLine(int lineNumber){
+        boolean hasNextLine = true;
+        try(BufferedReader reader = new BufferedReader(new FileReader(this.file))){
+            File myFile = new File(this.file);
+            Scanner myReader = new Scanner(myFile);
+            int currentLine = lineNumber + 1;
+            if(reader.readLine() != null){
+                hasNextLine = true;
+            }else{
+                hasNextLine = false;
+            }
+        }catch(Exception e){
+            System.out.print(e);
+        }
+        return hasNextLine;
     }
 
     public String readLine(int lineNumber){
@@ -35,7 +51,7 @@ public class FileUtilities
             int currentLine = 1;
             while((line = reader.readLine()) != null){
                 if (currentLine == lineNumber) {
-                    lineNumber--;
+
                     // System.out.println("Line " + lineNumber + ": " + line);
                     return(line);
                 }
