@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 public class GUI extends JFrame implements ActionListener, MouseListener
 {
-    
+
     JPanel titlePanel;
     JPanel sidePanel;
     JPanel centerPanel;
@@ -39,7 +39,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener
 
         addMouseListener(this);
 
-        
         labelTitle = new JLabel("WELCOME TO THE SIMULATION");
         labelTitle.setFont(new Font("Arial", Font.BOLD, 20));
         labelTitle.setAlignmentX(CENTER_ALIGNMENT);
@@ -64,7 +63,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         centerPanel.setBackground(Color.decode("#B9DA8B"));
         this.add(centerPanel, BorderLayout.CENTER);
 
-        
         titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.PAGE_AXIS));
         titlePanel.setBackground(Color.pink);
@@ -110,32 +108,40 @@ public class GUI extends JFrame implements ActionListener, MouseListener
                 break;
             case "next Step":
                 // nextStepLogic();
-                System.out.println(this.queue.getLowPLength());
-                displayQueue();
+                // System.out.println(this.queue.getLowPLength());
+                // displayQueue();
                 break;
             case "play":
-                playLogic();
 
+                playLogic();
+                
         }
-        // createDialogExample();
     }
+    // createDialogExample();
 
     public void playLogic(){
         FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
         int line = 2;
         boolean next = arrivals.hasNextLine(line);
-        while(next = true){
-            nextStepLogic(turn);
-            displayQueue();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+        
+        ImageIcon studantImage1 = new ImageIcon(studentImage);
+        ImageIcon teacherImage1 = new ImageIcon(teacherImage);
+        
+        while(next == true){
+            nextStepLogic(line);
+            System.out.println("A");
+            displayQueue(studantImage1, teacherImage1);
+            System.out.println("B");
+            // try {
+            // Thread.sleep(1000);
+            // } catch (InterruptedException e) {
+            // Thread.currentThread().interrupt();
+            // }
+            line++;
+            next = arrivals.hasNextLine(line);
         }
 
     }
-
     public void nextStepLogic(int line){
         FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
         System.out.println(arrivals.readLine(line));
@@ -146,14 +152,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         int staff = Integer.parseInt(data[2]);
         int served = Integer.parseInt(data[3]);
 
-        System.out.println(students);
+        // System.out.println(students);
 
         for (int i = 0; i < students;i++){
             this.queue.enqueue(time, false);
-            System.out.println("0");
-            System.out.println(this.queue.getLowPLength());
-        }
 
+        }
         for (int i = 0; i < staff;i++){
             this.queue.enqueue(time, true);
         }
@@ -162,29 +166,37 @@ public class GUI extends JFrame implements ActionListener, MouseListener
             this.queue.dequeue();
         }
 
-        System.out.println(this.queue.getLowPLength());
+        // System.out.println(this.queue.getLowPLength());
     }
 
-    public void displayQueue(){
-        ImageIcon studentImage1 = new ImageIcon(studentImage);
-        ImageIcon teacherImage1 = new ImageIcon(teacherImage);
-        centerPanel.removeAll();
+    public void displayQueue(ImageIcon studentImage1, ImageIcon teacherImage1){
 
-        // System.out.println(this.queue.getHighPLength());
+        centerPanel.removeAll();
+        System.out.println("C");
+
+        JLabel teacherImage2 = new JLabel(teacherImage1);
+        System.out.println(this.queue.getHighPLength());
         for(int i = 0; i < (this.queue.getHighPLength());i++){
-            JLabel image = new JLabel(teacherImage1);
-            centerPanel.add(image);
+            System.out.print("0");
+            // JLabel image = new JLabel(teacherImage1);
+            centerPanel.add(teacherImage2);
 
         }
 
+        JLabel studentImage2 = new JLabel(studentImage1);
         System.out.println(this.queue.getLowPLength());
         for(int i = 0; i < (this.queue.getLowPLength());i++){
-            JLabel image = new JLabel(studentImage1);
-            centerPanel.add(image);
+            System.out.print("1");
+            // JLabel image = new JLabel(studentImage1);
+            centerPanel.add(studentImage2);
 
         }
 
-        
         this.pack();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
