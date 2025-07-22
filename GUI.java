@@ -9,7 +9,8 @@ import java.awt.*;
 import java.awt.event.*;
 public class GUI extends JFrame implements ActionListener, MouseListener
 {
-
+    private Timer timer;
+    
     JPanel titlePanel;
     JPanel sidePanel;
     JPanel centerPanel;
@@ -32,6 +33,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     String teacherImage = "Teacher.png";
 
     public GUI(PQueue queueInput){
+        timer = new Timer(500, this);
+        
+        
         this.queue = queueInput;
 
         setTitle("Canteen Queues Simulation");
@@ -110,11 +114,14 @@ public class GUI extends JFrame implements ActionListener, MouseListener
                 // nextStepLogic();
                 // System.out.println(this.queue.getLowPLength());
                 // displayQueue();
+                timer.stop();
                 break;
             case "play":
 
-                playLogic();
-                
+                // playLogic();
+                timer.start();
+            case "timer":
+                System.out.println("image");
         }
     }
     // createDialogExample();
@@ -128,20 +135,37 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         ImageIcon teacherImage1 = new ImageIcon(teacherImage);
         
         while(next == true){
-            nextStepLogic(line);
-            System.out.println("A");
-            displayQueue(studantImage1, teacherImage1);
+            // nextStepLogic(line);
+            // System.out.println("A");
+            // displayQueue(studantImage1, teacherImage1);
             System.out.println("B");
-            // try {
-            // Thread.sleep(1000);
-            // } catch (InterruptedException e) {
-            // Thread.currentThread().interrupt();
-            // }
+            try {
+            Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            }
+            JLabel teacherImage2 = new JLabel(teacherImage1);
+            centerPanel.add(teacherImage2);
+            centerPanel.repaint();
+            this.pack();
+            
             line++;
             next = arrivals.hasNextLine(line);
         }
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
+    
     public void nextStepLogic(int line){
         FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
         System.out.println(arrivals.readLine(line));
