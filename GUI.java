@@ -7,6 +7,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 public class GUI extends JFrame implements ActionListener, MouseListener
 {
     private Timer timer;
@@ -39,11 +40,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     private double studentAverageTime;
 
     private int line = 2;
-    private double studentAverageWait;
-    private double staffAverageWait;
-    
+    private double staffServed;
+    private double studentsServed;
+    private ArrayList<Integer> studentTimes = new ArrayList<>();
+    private ArrayList<Integer> staffTimes = new ArrayList<>();
+
     public GUI(PQueue queueInput){
-        timer = new Timer(500, this);
 
         this.queue = queueInput;
         setTitle("Canteen Queues Simulation");
@@ -123,46 +125,65 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         String cmd = e.getActionCommand();
         System.out.println(cmd);
         switch(cmd){
-            case "file read":
-                // nextStepLogic(2);
-                break;
             case "next Step":
                 playLogic();
-                // System.out.println(this.queue.getLowPLength());
-                // displayQueue();
-                // timer.stop();
-                break;
-            case "play":
-
-                // playLogic();
-                // timer.start();
-            case "timer":
-                // System.out.println("image");
-                // playLogic();
         }
     }
     // createDialogExample();
 
     public void averageTimeLogic(int inputTime, boolean teacher){
         int time = line - 1;
-        
-        if (teacher){
-            if(staffAverageWait == 0){
-                
+        double averageStudent = 0;
+        double averageStaff = 0;
+
+        if(teacher){
+            this.staffTimes.add(time - inputTime);
+            System.out.println(staffTimes.size());
+            for (int i = 0; i < staffTimes.size(); i++){
+                averageStaff = averageStaff + staffTimes.get(i);
             }
-            
-            
+            averageStaff = (averageStaff / staffTimes.size());
+            this.staffWaitTime.setText(Double.toString(averageStaff));
         }else{
-            
+            this.studentTimes.add(time - inputTime);
+            System.out.println(studentTimes.size());
+            for (int i = 0; i < studentTimes.size(); i++){
+                averageStudent = averageStudent + studentTimes.get(i);
+            }
+            averageStudent = (averageStudent / studentTimes.size());
+            this.studentWaitTime.setText(Double.toString(averageStudent));
         }
+
         
         
+        // if (teacher){
+        // if (this.staffServed == 0){
+        // staffAverageWait = (time - inputTime);
+        // this.staffServed++;
+        // }else{
+        // staffAverageWait = ((staffAverageWait + (time - inputTime))/2);
+        // }
+        // this.staffWaitTime.setText(Double.toString(staffAverageWait));
+        // }else{
+        // if (this.studentsServed == 0){
+        // staffAverageWait = (time - inputTime);
+        // this.studentsServed++;
+        // }else{
+        // studentAverageWait = ((studentAverageWait + (time - inputTime))/2);
+
+        // }
+        // this.studentWaitTime.setText(Double.toString(studentAverageWait));
+        // }
+
+        this.pack();
     }
+
     public void playLogic(){
         FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
         nextStepLogic(line);
         staffInLine.setText("Staff In The Queue: " + this.queue.getHighPLength());
         studentsInLine.setText("Students In The Queue: " + this.queue.getLowPLength());
+
         time.setText("Minute: " + (line-1));
         this.line++;
         this.pack();
@@ -201,7 +222,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener
             System.out.println("no data left");
         }
 
-        
         // System.out.println(this.queue.getLowPLength());
     }
 
