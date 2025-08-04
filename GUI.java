@@ -10,7 +10,7 @@ import java.awt.event.*;
 public class GUI extends JFrame implements ActionListener, MouseListener
 {
     private Timer timer;
-    
+
     JPanel titlePanel;
     JPanel sidePanel;
     JPanel centerPanel;
@@ -18,6 +18,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     JLabel labelTitle;
     JLabel explanation;
     JLabel time;
+    JLabel staffWaitTime;
+    JLabel studentWaitTime;
+    JLabel staffInLine;
+    JLabel studentsInLine;
 
     JButton nextStep;
     JButton pause;
@@ -25,19 +29,23 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     JButton play;
 
     private PQueue queue; 
-    private int turn = 2;
 
     String studentImage = "Student.jpg";
     JLabel images;
 
     String teacherImage = "Teacher.png";
 
+    private double staffAverageTime;
+    private double studentAverageTime;
+
+    private int line = 2;
+    private double studentAverageWait;
+    private double staffAverageWait;
+    
     public GUI(PQueue queueInput){
         timer = new Timer(500, this);
-        
-        
-        this.queue = queueInput;
 
+        this.queue = queueInput;
         setTitle("Canteen Queues Simulation");
         this.getContentPane().setPreferredSize(new Dimension(600, 600));
 
@@ -49,6 +57,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         explanation = new JLabel("Top queue is students and bottom queue is staff");
         explanation.setAlignmentX(CENTER_ALIGNMENT);
         time = new JLabel("Minute: 1");
+        staffWaitTime = new JLabel("Staff average time waited");
+        studentWaitTime = new JLabel("Student average time waited");
+        staffInLine = new JLabel("Staff In The Queue: 0");
+        studentsInLine = new JLabel("Students In The Queue: 0");
 
         nextStep = new JButton("next Step");
         nextStep.addActionListener(this);
@@ -63,7 +75,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         images = new JLabel(studentImage1);
 
         centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
+        centerPanel.setLayout(new GridLayout(0,2));
         centerPanel.setBackground(Color.decode("#B9DA8B"));
         this.add(centerPanel, BorderLayout.CENTER);
 
@@ -81,10 +93,14 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         this.add(sidePanel, BorderLayout.LINE_START);
 
         sidePanel.add(time);
-        sidePanel.add(nextStep);
-        sidePanel.add(pause);
-        sidePanel.add(close);
-        sidePanel.add(play);
+        centerPanel.add(nextStep);
+        centerPanel.add(pause);
+        centerPanel.add(close);
+        centerPanel.add(play);
+        sidePanel.add(staffWaitTime);
+        sidePanel.add(studentWaitTime);
+        centerPanel.add(staffInLine);
+        centerPanel.add(studentsInLine);
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
@@ -108,88 +124,84 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         System.out.println(cmd);
         switch(cmd){
             case "file read":
-                nextStepLogic(2);
+                // nextStepLogic(2);
                 break;
             case "next Step":
-                // nextStepLogic();
+                playLogic();
                 // System.out.println(this.queue.getLowPLength());
                 // displayQueue();
-                timer.stop();
+                // timer.stop();
                 break;
             case "play":
 
                 // playLogic();
-                timer.start();
+                // timer.start();
             case "timer":
-                System.out.println("image");
+                // System.out.println("image");
+                // playLogic();
         }
     }
     // createDialogExample();
 
-    public void playLogic(){
-        FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
-        int line = 2;
-        boolean next = arrivals.hasNextLine(line);
+    public void averageTimeLogic(int inputTime, boolean teacher){
+        int time = line - 1;
         
-        ImageIcon studantImage1 = new ImageIcon(studentImage);
-        ImageIcon teacherImage1 = new ImageIcon(teacherImage);
-        
-        while(next == true){
-            // nextStepLogic(line);
-            // System.out.println("A");
-            // displayQueue(studantImage1, teacherImage1);
-            System.out.println("B");
-            try {
-            Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        if (teacher){
+            if(staffAverageWait == 0){
+                
             }
-            JLabel teacherImage2 = new JLabel(teacherImage1);
-            centerPanel.add(teacherImage2);
-            centerPanel.repaint();
-            this.pack();
             
-            line++;
-            next = arrivals.hasNextLine(line);
+            
+        }else{
+            
         }
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
     }
-    
+    public void playLogic(){
+        FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
+        nextStepLogic(line);
+        staffInLine.setText("Staff In The Queue: " + this.queue.getHighPLength());
+        studentsInLine.setText("Students In The Queue: " + this.queue.getLowPLength());
+        time.setText("Minute: " + (line-1));
+        this.line++;
+        this.pack();
+    }
+
     public void nextStepLogic(int line){
         FileUtilities arrivals = new FileUtilities("arrivals - arrivals.csv");
         System.out.println(arrivals.readLine(line));
-        String[] data = arrivals.readLine(line).split(",");
+        try{
+            String[] data = arrivals.readLine(line).split(",");
+            int students = Integer.parseInt(data[1]);
+            int time = Integer.parseInt(data[0]);
+            int staff = Integer.parseInt(data[2]);
+            int served = Integer.parseInt(data[3]);
 
-        int students = Integer.parseInt(data[1]);
-        int time = Integer.parseInt(data[0]);
-        int staff = Integer.parseInt(data[2]);
-        int served = Integer.parseInt(data[3]);
+            // System.out.println(students);
 
-        // System.out.println(students);
+            for (int i = 0; i < students;i++){
+                this.queue.enqueue(time, false);
 
-        for (int i = 0; i < students;i++){
-            this.queue.enqueue(time, false);
+            }
+            for (int i = 0; i < staff;i++){
+                this.queue.enqueue(time, true);
 
+            }
+
+            for (int i = 0; i < served;i++){
+                if (this.queue.getHighPLength() > 0){
+                    averageTimeLogic(this.queue.dequeue(), true);
+                }else{
+                    averageTimeLogic(this.queue.dequeue(), false);
+                }
+
+            }
+        }catch(Exception e){
+            System.out.println("no data left");
         }
-        for (int i = 0; i < staff;i++){
-            this.queue.enqueue(time, true);
-        }
 
-        for (int i = 0; i < served;i++){
-            this.queue.dequeue();
-        }
-
+        
         // System.out.println(this.queue.getLowPLength());
     }
 
@@ -216,6 +228,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener
 
         }
 
+        this.revalidate();
+        this.repaint();
         this.pack();
         try {
             Thread.sleep(1000);

@@ -10,8 +10,7 @@ public class PQueue
     private Queue lowP;
     private Queue highP;
 
-    public PQueue()
-    {
+    public PQueue(){
         this.lowP = new Queue();
         this.highP = new Queue();
     }
@@ -32,8 +31,7 @@ public class PQueue
         }
     }
     
-    public boolean queueEmpty()
-    {
+    public boolean queueEmpty(){
         if(highP.emptyQueue() && lowP.emptyQueue()){
             return true;
         }else{
