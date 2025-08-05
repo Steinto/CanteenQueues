@@ -19,15 +19,18 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     JLabel labelTitle;
     JLabel explanation;
     JLabel time;
+    JLabel staffWaitLable;
     JLabel staffWaitTime;
+    JLabel studentWaitLable;
     JLabel studentWaitTime;
     JLabel staffInLine;
     JLabel studentsInLine;
 
     JButton nextStep;
     JButton pause;
-    JButton close;
-    JButton play;
+    JButton pushing;
+ 
+
 
     private PQueue queue; 
 
@@ -39,6 +42,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener
     private double staffAverageTime;
     private double studentAverageTime;
 
+    private boolean pushingState = true;
+    
     private int line = 2;
     private double staffServed;
     private double studentsServed;
@@ -59,8 +64,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         explanation = new JLabel("Top queue is students and bottom queue is staff");
         explanation.setAlignmentX(CENTER_ALIGNMENT);
         time = new JLabel("Minute: 1");
-        staffWaitTime = new JLabel("Staff average time waited");
-        studentWaitTime = new JLabel("Student average time waited");
+        staffWaitTime = new JLabel("0.0");
+        staffWaitLable = new JLabel("Staff average time waited");
+        studentWaitTime = new JLabel("0.0");
+        studentWaitLable = new JLabel("Student average time waited");
         staffInLine = new JLabel("Staff In The Queue: 0");
         studentsInLine = new JLabel("Students In The Queue: 0");
 
@@ -68,16 +75,15 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         nextStep.addActionListener(this);
         pause = new JButton("pause");
         pause.addActionListener(this);
-        close = new JButton("file read");
-        close.addActionListener(this);
-        play = new JButton("play");
-        play.addActionListener(this);
+        pushing = new JButton("pushing?");
+        pushing.addActionListener(this);
 
         ImageIcon studentImage1 = new ImageIcon(studentImage);
         images = new JLabel(studentImage1);
 
         centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(0,2));
+        centerPanel.setLayout(new GridLayout(0,2,10,10));
+        // centerPanel.getLayout().setHgap(4);
         centerPanel.setBackground(Color.decode("#B9DA8B"));
         this.add(centerPanel, BorderLayout.CENTER);
 
@@ -97,9 +103,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         sidePanel.add(time);
         centerPanel.add(nextStep);
         centerPanel.add(pause);
-        centerPanel.add(close);
-        centerPanel.add(play);
+        sidePanel.add(pushing);
+        sidePanel.add(staffWaitLable);
         sidePanel.add(staffWaitTime);
+        sidePanel.add(studentWaitLable);
         sidePanel.add(studentWaitTime);
         centerPanel.add(staffInLine);
         centerPanel.add(studentsInLine);
@@ -127,6 +134,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener
         switch(cmd){
             case "next Step":
                 playLogic();
+            case "pushing?":
+                if (this.pushingState == false){
+                    this.pushingState = true;
+                }else{
+                    this.pushingState = false;
+                }
         }
     }
     // createDialogExample();
@@ -151,7 +164,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener
                 averageStudent = averageStudent + studentTimes.get(i);
             }
             averageStudent = (averageStudent / studentTimes.size());
-            this.studentWaitTime.setText(Double.toString(averageStudent));
+            double temp = Math.round(averageStudent * 100);
+            temp = temp / 100;
+            this.studentWaitTime.setText(Double.toString(temp));
         }
 
         
