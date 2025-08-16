@@ -8,6 +8,7 @@ public class Node
 {
     private int data;
     private Node next;
+    private boolean high;
 
     public Node(){
         this.data = 0;
@@ -30,5 +31,8 @@ public class Node
     }
     public Node getNext(){
         return this.next;
+    }
+    public boolean gethigh(){
+        return this.high;
     }
 }

@@ -43,16 +43,21 @@ public class FileUtilities
         return hasNextLine;
     }
 
+    public void simulation(){
+
+    }
+
     public String readLine(int lineNumber){
         String line = "";
         try(BufferedReader reader = new BufferedReader(new FileReader(this.file))){
             File myFile = new File(this.file);
+
+
             Scanner myReader = new Scanner(myFile);
             int currentLine = 1;
             while((line = reader.readLine()) != null){
                 if (currentLine == lineNumber) {
 
-                    // System.out.println("Line " + lineNumber + ": " + line);
                     return(line);
                 }
                 currentLine++;
@@ -61,5 +66,89 @@ public class FileUtilities
             System.out.print(e);
         }
         return(line);
+    }
+    
+    public boolean isValidCsv() {
+        if (this.file == null || this.file.length() == 0) {
+            System.out.println("Error: File does not exist, is a directory, or is empty.");
+            return false;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.file))) {
+            String line;
+            int lineNumber = 0;
+
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+
+                String trimmedLine = line.trim();
+                if (trimmedLine.isEmpty()) {
+                    continue;
+                }
+
+                
+                String[] parts = trimmedLine.split(",");
+
+                // all lines must have exactly 4 columns
+                if (parts.length != 4) {
+                    System.out.println("Validation failed on line " + lineNumber + ": Does not contain 4 columns.");
+                    return false;
+                }
+
+
+                if (lineNumber == 1) {
+                    if (!isHeaderValid(parts)) {
+                        System.out.println("Validation failed on header line: Not all parts are valid words.");
+                        return false;
+                    }
+                } else {
+                    
+                    if (!isDataLineValid(parts)) {
+                        System.out.println("Validation failed on line " + lineNumber + ": Not all parts are valid integers.");
+                        return false;
+                    }
+                }
+            }
+            
+            if (lineNumber == 0) {
+                System.out.println("Validation failed: The file is effectively empty (contains no non-empty lines).");
+                return false;
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean isHeaderValid(String[] parts) {
+        for (String part : parts) {
+            String trimmedPart = part.trim();
+            if (trimmedPart.isEmpty() || isInteger(trimmedPart)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isDataLineValid(String[] parts) {
+        for (String part : parts) {
+            String trimmedPart = part.trim();
+            if (!isInteger(trimmedPart)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private static boolean isInteger(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

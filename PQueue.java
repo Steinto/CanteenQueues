@@ -24,15 +24,15 @@ public class PQueue
     }
     
     int dequeue (){
-        if(highP.emptyQueue()){
-            return (lowP.dequeue());
+        if(this.highP.emptyQueue()){
+            return (this.lowP.dequeue());
         }else{
-            return (highP.dequeue());
+            return (this.highP.dequeue());
         }
     }
     
     public boolean queueEmpty(){
-        if(highP.emptyQueue() && lowP.emptyQueue()){
+        if(this.highP.emptyQueue() && this.lowP.emptyQueue()){
             return true;
         }else{
             return false;
@@ -40,10 +40,10 @@ public class PQueue
     }
     
     public int getLowPLength(){
-        return lowP.getLength();
+        return this.lowP.getLength();
     }
     
     public int getHighPLength(){
-        return highP.getLength();
+        return this.highP.getLength();
     }
 }
